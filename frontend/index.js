@@ -14,14 +14,16 @@ const renderPage = async () => {
 
     books.data.forEach(book => {
         const bookCard = document.createElement("div");
-        bookCard.innerHTML = `
-            <h2>${book.title}</h2>
-            <p><strong>Författare:</strong> ${book.author}</p>
-            <p>Antal sidor: ${book.pages}</p>
-            <p>Utgivningsdatum: ${book.releaseDate}</P>
-            <p>Betyg: ${book.rating}</p>
-            
+        bookCard.classList.add("bookCard")
+        const imgUrl = baseUrl + book.image.url;
 
+        bookCard.innerHTML = `
+            <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
+            <h2>${book.title}</h2>
+            <p> ${book.author}</p>
+            <p>Antal sidor: ${book.pages}</p>
+            <p>Utg.datum: ${book.releaseDate}</P>
+            <p>Betyg: ${book.rating}</p>
         `;
 
         bookDiv.append(bookCard);
@@ -29,3 +31,15 @@ const renderPage = async () => {
 };
 
 renderPage();
+
+const getDisplayColor = async () => {
+      const response = await axios.get(`${baseUrl}/api/display-colors`);
+      const data = response.data;
+      console.log(data);
+    //   const theme = data.data[0].attributes.theme;
+  
+    //   document.body.setAttribute("data-theme", theme);
+ 
+  };
+  
+  getDisplayColor();
