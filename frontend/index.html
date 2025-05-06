@@ -16,9 +16,30 @@
         <header>
             <div class="header-container">
                 <h1>Bookduck</h1>
-                <div class="header-login">
+                <div class="header-login-div" id="loginDiv">
                     <img src="/login1.png" alt="">
                     <span>Logga in</span>
+                </div>
+                <div class="modal" id="loginModal">
+                    <div class="modal-container">
+                      <span class="close-btn" id="closeModalBtn">&times;</span>
+                      
+                      <div id="loginView">
+                        <h2 class="modal-h2">Logga in</h2>
+                        <input type="text" placeholder="Användarnamn" id="loginUsername" />
+                        <input type="password" placeholder="Lösenord" id="loginPassword"/>
+                        <button class="button" id="loginAccountBtn">Logga in</button>
+                        <p class="new-account-p">Ny användare?</p>
+                        <button class="button create-account-btn" id="createAccountBtn">Skapa konto</button>
+                       </div>
+                       
+                       <div id="registerView" style="display: none;">
+                        <h2 class="modal-h2">Skapa konto</h2>
+                        <input type="text" placeholder="Användarnamn" id="username" />
+                        <input type="email" placeholder="E-post" id="email" />
+                        <input type="password" placeholder="Lösenord" id="password" />
+                        <button class="button" id="saveNewAccountBtn">Skapa konto</button>
+                    </div>
                 </div>
             </div>
         </header>

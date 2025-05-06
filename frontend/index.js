@@ -33,13 +33,101 @@ const renderPage = async () => {
 renderPage();
 
 const getDisplayColor = async () => {
-      const response = await axios.get(`${baseUrl}/api/display-colors`);
-      const data = response.data;
-      console.log(data);
-    //   const theme = data.data[0].attributes.theme;
+    const response = await axios.get(`${baseUrl}/api/display-color`);
+    const data = response.data;
+    console.log(data);
+
+    const colorTheme = data.data.colorTheme;
+    console.log(colorTheme);
+
+    document.body.classList.add(colorTheme);
+};
   
-    //   document.body.setAttribute("data-theme", theme);
- 
-  };
-  
-  getDisplayColor();
+getDisplayColor();
+
+const openModalBtn = document.querySelector("#loginDiv");
+const closeModalBtn = document.querySelector("#closeModalBtn");
+const loginModal = document.querySelector("#loginModal");
+
+openModalBtn.addEventListener("click", () => {
+    loginModal.style.display = "flex";
+});
+
+closeModalBtn.addEventListener("click", () => {
+    loginModal.style.display = "none";
+});
+
+window.addEventListener("click", (event) => {
+    if (event.target === loginModal) {
+        loginModal.style.display = "none";
+    }
+});
+
+const loginView = document.querySelector("#loginView");
+const registerView = document.querySelector("#registerView");
+
+document.querySelector("#createAccountBtn").addEventListener("click", () => {
+    loginView.style.display = "none";
+    registerView.style.display = "block";
+});
+
+//INLOGGNING
+
+document.querySelector("#loginAccountBtn").addEventListener("click", async () => {
+    const loginUsername = document.querySelector("#loginUsername").value;
+    const loginPassword = document.querySelector("#loginPassword").value;
+
+    const response = await axios.post("http://localhost:1337/api/auth/local", {
+        identifier: loginUsername,
+        password: loginPassword
+    });
+
+    const jwt = response.data.jwt;
+    const user = response.data.user;
+
+    console.log("Inloggad som:", user.username);
+    console.log("JWT-token:", jwt);
+
+    localStorage.setItem("jwt", jwt);
+
+    alert("Inloggning lyckades!");
+    loginModal.style.display = "none";
+
+    createLoginheader(user);
+});
+
+//REGISTRERING
+
+document.querySelector("#saveNewAccountBtn").addEventListener("click", async () => {
+    const username = document.querySelector("#username").value;
+    const email = document.querySelector("#email").value;
+    const password = document.querySelector("#password").value;
+    
+    const response = await axios.post("http://localhost:1337/api/auth/local/register", {
+    username,
+    email,
+    password,
+});
+
+alert("Konto skapades! Du kan nu logga in.");
+
+registerView.style.display = "none";
+loginView.style.display = "block";
+});
+
+const createLoginheader = (user) => {
+    const loginDiv = document.querySelector("#loginDiv");
+    loginDiv.innerHTML = `
+    <div class="loggedinUserHeader">
+    <button class="user-account-btn">
+        <img src="/login1.png" />
+        <span>${user.username}'s konto</span>
+    </button>
+    <button class="user-account-btn">
+        <img src="/logout.png" />
+        <span>Logga ut</span>
+    </button>
+    </div>
+    `;
+    // loginDiv.removeEventListener("click", openModal); // Tar bort möjligheten att öppna modalen
+};
