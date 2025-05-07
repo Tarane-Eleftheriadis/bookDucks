@@ -24,6 +24,9 @@ const renderPage = async () => {
             <p>Antal sidor: ${book.pages}</p>
             <p>Utg.datum: ${book.releaseDate}</P>
             <p>Betyg: ${book.rating}</p>
+            <button class="to-read-btn" data-id="${book.id}">
+                <img src="/favorite2.png" />
+            </button>
         `;
 
         bookDiv.append(bookCard);
@@ -123,11 +126,16 @@ const createLoginheader = (user) => {
         <img src="/login1.png" />
         <span>${user.username}'s konto</span>
     </button>
-    <button class="user-account-btn">
+    <button class="user-account-btn" id="logoutBtn">
         <img src="/logout.png" />
         <span>Logga ut</span>
     </button>
     </div>
     `;
-    // loginDiv.removeEventListener("click", openModal); // Tar bort möjligheten att öppna modalen
+
+    const logout = document.querySelector("#logoutBtn");
+    logout.addEventListener("click", () => {
+        localStorage.removeItem("jwt");
+        location.reload();
+    })
 };

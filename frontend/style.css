@@ -42,7 +42,7 @@ body.color{
     padding: 1rem;
     margin: 0.5rem;
     gap: 0.3rem;
-
+    position: relative;
 }
 .bookImg{
     width: 100%;
@@ -141,5 +141,13 @@ input:-webkit-autofill {
     align-items: center;
     border: none;
     background-color: transparent;
+    cursor: pointer;
+}
+.to-read-btn{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: none;
+    border: none;
     cursor: pointer;
 }
