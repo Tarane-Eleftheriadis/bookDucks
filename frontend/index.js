@@ -31,6 +31,30 @@ const renderPage = async () => {
 
         bookDiv.append(bookCard);
     });  
+
+    const toReadBtns = document.querySelectorAll(".to-read-btn");
+
+    toReadBtns.forEach(btn => {
+        btn.addEventListener("click", async () => {
+            const bookId = btn.getAttribute("data-id");
+            console.log(bookId)
+
+            const jwt = localStorage.getItem("jwt");
+            if (!jwt) {
+                alert("Du måste vara inloggad för att lägga till i läsa-listan.");
+                return;
+            }
+                await axios.post("http://localhost:1337/api/reading-lists", {
+                    data: {
+                        book: bookId
+                    }
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`
+                    }
+                });
+        });
+    });
 };
 
 renderPage();
@@ -122,7 +146,7 @@ const createLoginheader = (user) => {
     const loginDiv = document.querySelector("#loginDiv");
     loginDiv.innerHTML = `
     <div class="loggedinUserHeader">
-    <button class="user-account-btn">
+    <button class="user-account-btn" id="profilePage">
         <img src="/login1.png" />
         <span>${user.username}'s konto</span>
     </button>
@@ -138,4 +162,10 @@ const createLoginheader = (user) => {
         localStorage.removeItem("jwt");
         location.reload();
     })
+
+    document.querySelector("#profilePage").addEventListener("click", async () => {
+        window.location.href ="profile-page.html"
+    })
+
+
 };
