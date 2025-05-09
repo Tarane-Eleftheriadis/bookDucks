@@ -8,15 +8,15 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="index.js" defer></script>
         <script src="profile-page.js" defer></script>
-        
+        <script src="theme.js" defer></script>
+        <script src="header.js" defer></script>
         <link rel="stylesheet" href="style.css">
     </head>
 <body>
     <header>
         <div class="header-container">
-            <h1>Bookduck</h1>
+            <h1><a href="index.html" class="home-logo">Bookduck</a></h1>
             <div class="header-login-div" id="loginDiv">
                 <img src="/login1.png" alt="">
                 <span>Logga in</span>
@@ -49,9 +49,19 @@
             <h2 class="saved-books-h2">Mina sparade böcker</h2>
         </div>
     </div>
-    <div class="saved-books-div-container" id="savedBooksDivContainer"></div>
-    <div class="saved-books-h2-container">
-        <h2 class="saved-books-h2">Mina recenssioner böcker</h2>
+    <div>
+        <select name="sortSavedBooks" id="sortSavedBooks" class="sort-saved-books">
+            <option value="" disabled selected>Sortera</option>
+            <option value="author">Författare A-Ö</option>
+            <option value="title">Title A-Ö</option>
+        </select>
     </div>
+    <div class="saved-books-div-container" id="savedBooksDivContainer"></div>
+    <div class="rated-books">
+        <div class="rated-books-h2-container">
+            <h2 class="rated-books-h2">Mina recenserade böcker</h2>
+        </div>
+    </div>
+    
 </body>
 </html>

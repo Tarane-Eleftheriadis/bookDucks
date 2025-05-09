@@ -1,7 +1,8 @@
 const savedBooksDiv = document.querySelector("#savedBooksDivContainer");
+const baseUrl = "http://localhost:1337";
 
 const getDataSavedBooks = async () => {
-    const respons = await axios.get(`${baseUrl}/api/books?populate=*`);
+    const respons = await axios.get(`${baseUrl}/api/saveds?populate=*`);
     const data = respons.data;
     console.log(data);
     return data;
@@ -10,26 +11,30 @@ const getDataSavedBooks = async () => {
 const renderPageSavedBooks = async () => {
     let books = await getDataSavedBooks();
 
-    books.data.forEach(book => {
+    books.data.forEach(item => {
         const savedBookCard = document.createElement("div");
-        savedBookCard.classList.add("bookCard")
-        savedBookCard.classList.add("savedBookCard")
-        const imgUrl = baseUrl + book.image.url;
+        savedBookCard.classList.add("bookCard", "savedBookCard");
+
+        const book = item.book;
+        // const imgUrl = baseUrl + book.image.url;
 
         savedBookCard.innerHTML = `
-            <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
+            
             <h2>${book.title}</h2>
-            <p> ${book.author}</p>
+            <p>${book.author}</p>
             <p>Antal sidor: ${book.pages}</p>
-            <p>Utg.datum: ${book.releaseDate}</P>
+            <p>Utg.datum: ${book.releaseDate}</p>
             <p>Betyg: ${book.rating}</p>
-            <button class="to-read-btn" data-id="${book.id}">
-                <img src="/favorite2.png" />
+            <button class="remove-btn" id="removeBtn">
+            <img src="/delete_red.png" />
             </button>
         `;
 
         savedBooksDiv.append(savedBookCard);
     });  
-}
+};
+
 
 renderPageSavedBooks();
+getDisplayColor();
+createLoginheader();

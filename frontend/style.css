@@ -28,6 +28,10 @@ body.color{
 .header-login-div img {
     width: 2rem;
 }
+.home-logo{
+    color: black;
+    text-decoration: none;
+}
 .book-div-container{
     display: flex;
     justify-content: center;
@@ -55,7 +59,7 @@ body.color{
 .bookCard p{
     color: #808080;
     margin: 0;
-    font-size: 0.8rem;
+    font-size: 0.755rem;
 }
 .modal{
     display: none;
@@ -145,22 +149,19 @@ input:-webkit-autofill {
     background-color: transparent;
     cursor: pointer;
 }
-.to-read-btn{
-    position: absolute;
-    bottom: 0;
-    right: 0;
+.to-read-btn, .star-btn{
     background: none;
     border: none;
     cursor: pointer;
 }
 
 /* Profile-page */
-.saved-books{
+.saved-books, .rated-books{
     display: flex;
     justify-content: center;
 }
 
-.saved-books-h2-container{
+.saved-books-h2-container, .rated-books-h2-container{
     background-color: #e6e6e6;
     border: none;
     margin-top: 2%;
@@ -168,7 +169,7 @@ input:-webkit-autofill {
     padding: 1%;
     border-radius: 10px;
 }
-.saved-books-h2{
+.saved-books-h2, .rated-books-h2{
     font-weight: 300;
     text-align: center;
 }
@@ -176,10 +177,45 @@ input:-webkit-autofill {
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
-    margin: 2% 10%;
+    margin: 0 10%;
 }
 .savedBookCard{
     flex: 0 0 auto;
-    width: 200px;
+    width: 170px;
 }
+.sort-saved-books{
+    height: 2rem;
+    border-radius: 5px;
+    margin: 1% 10%;
+    border: 1px solid lightgrey;
 
+}
+.rating {
+    display: flex;
+    gap: 2px;
+    cursor: pointer;
+  }
+  
+  .star {
+    font-size: 20px;
+    color: lightgray;
+    transition: color 0.2s;
+  }
+  
+  .star.hover,
+  .star.selected {
+    color: gold;
+  }
+.heart-and-raiting-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.remove-btn{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+.remove-btn:hover{
+    border: 1px solid red;
+}

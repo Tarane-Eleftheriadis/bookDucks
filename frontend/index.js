@@ -1,5 +1,4 @@
 const bookDiv = document.querySelector("#bookDivContainer");
-
 const baseUrl = "http://localhost:1337";
 
 const getData = async () => {
@@ -24,53 +23,45 @@ const renderPage = async () => {
             <p>Antal sidor: ${book.pages}</p>
             <p>Utg.datum: ${book.releaseDate}</P>
             <p>Betyg: ${book.rating}</p>
-            <button class="to-read-btn" data-id="${book.id}">
+            <div class="heart-and-raiting-container">
+                <div class="rating" data-id="${book.id}">
+                ${[1, 2, 3, 4, 5].map(i => `<span class="star" data-rating="${i}">&#9733;</span>`).join("")}
+                </div>
+                <button class="to-read-btn" data-id="${book.id}">
                 <img src="/favorite2.png" />
-            </button>
+                </button>
+            </div>
         `;
 
         bookDiv.append(bookCard);
-    });  
+    });
 
     const toReadBtns = document.querySelectorAll(".to-read-btn");
 
     toReadBtns.forEach(btn => {
         btn.addEventListener("click", async () => {
-            const bookId = btn.getAttribute("data-id");
-            console.log(bookId)
+            const bookId = Number(btn.getAttribute("data-id"));
+            console.log(bookId);
 
             const jwt = localStorage.getItem("jwt");
+            const user = JSON.parse(localStorage.getItem("user"));
             if (!jwt) {
                 alert("Du måste vara inloggad för att lägga till i läsa-listan.");
                 return;
             }
-                await axios.post("http://localhost:1337/api/reading-lists", {
-                    data: {
-                        book: bookId
-                    }
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${jwt}`
-                    }
-                });
+
+            // Skickar bok-ID och användar-ID till Strapi
+            await axios.post(`${baseUrl}/api/saveds`, {
+                data: {
+                    book: bookId,
+                    users_permissions_user: user.id // Skickar användarens ID
+                }
+            }, {
+                headers: { Authorization: `Bearer ${jwt}` }
+            });
         });
     });
 };
-
-renderPage();
-
-const getDisplayColor = async () => {
-    const response = await axios.get(`${baseUrl}/api/display-color`);
-    const data = response.data;
-    console.log(data);
-
-    const colorTheme = data.data.colorTheme;
-    console.log(colorTheme);
-
-    document.body.classList.add(colorTheme);
-};
-  
-getDisplayColor();
 
 const openModalBtn = document.querySelector("#loginDiv");
 const closeModalBtn = document.querySelector("#closeModalBtn");
@@ -104,7 +95,7 @@ document.querySelector("#loginAccountBtn").addEventListener("click", async () =>
     const loginUsername = document.querySelector("#loginUsername").value;
     const loginPassword = document.querySelector("#loginPassword").value;
 
-    const response = await axios.post("http://localhost:1337/api/auth/local", {
+    const response = await axios.post(`${baseUrl}/api/auth/local`, {
         identifier: loginUsername,
         password: loginPassword
     });
@@ -116,6 +107,7 @@ document.querySelector("#loginAccountBtn").addEventListener("click", async () =>
     console.log("JWT-token:", jwt);
 
     localStorage.setItem("jwt", jwt);
+    localStorage.setItem("user", JSON.stringify(user)); // Spara användaren i localStorage
 
     alert("Inloggning lyckades!");
     loginModal.style.display = "none";
@@ -130,42 +122,18 @@ document.querySelector("#saveNewAccountBtn").addEventListener("click", async () 
     const email = document.querySelector("#email").value;
     const password = document.querySelector("#password").value;
     
-    const response = await axios.post("http://localhost:1337/api/auth/local/register", {
-    username,
-    email,
-    password,
+    const response = await axios.post(`${baseUrl}/api/auth/local/register`, {
+        username,
+        email,
+        password,
+    });
+
+    alert("Konto skapades! Du kan nu logga in.");
+
+    registerView.style.display = "none";
+    loginView.style.display = "block";
 });
 
-alert("Konto skapades! Du kan nu logga in.");
-
-registerView.style.display = "none";
-loginView.style.display = "block";
-});
-
-const createLoginheader = (user) => {
-    const loginDiv = document.querySelector("#loginDiv");
-    loginDiv.innerHTML = `
-    <div class="loggedinUserHeader">
-    <button class="user-account-btn" id="profilePage">
-        <img src="/login1.png" />
-        <span>${user.username}'s konto</span>
-    </button>
-    <button class="user-account-btn" id="logoutBtn">
-        <img src="/logout.png" />
-        <span>Logga ut</span>
-    </button>
-    </div>
-    `;
-
-    const logout = document.querySelector("#logoutBtn");
-    logout.addEventListener("click", () => {
-        localStorage.removeItem("jwt");
-        location.reload();
-    })
-
-    document.querySelector("#profilePage").addEventListener("click", async () => {
-        window.location.href ="profile-page.html"
-    })
-
-
-};
+renderPage();
+getDisplayColor();
+createLoginheader();
