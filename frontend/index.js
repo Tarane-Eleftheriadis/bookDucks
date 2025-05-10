@@ -50,11 +50,10 @@ const renderPage = async () => {
                 return;
             }
 
-            // Skickar bok-ID och användar-ID till Strapi
             await axios.post(`${baseUrl}/api/saveds`, {
                 data: {
                     book: bookId,
-                    users_permissions_user: user.id // Skickar användarens ID
+                    users_permissions_user: user.id
                 }
             }, {
                 headers: { Authorization: `Bearer ${jwt}` }
@@ -107,7 +106,7 @@ document.querySelector("#loginAccountBtn").addEventListener("click", async () =>
     console.log("JWT-token:", jwt);
 
     localStorage.setItem("jwt", jwt);
-    localStorage.setItem("user", JSON.stringify(user)); // Spara användaren i localStorage
+    localStorage.setItem("user", JSON.stringify(user));
 
     alert("Inloggning lyckades!");
     loginModal.style.display = "none";

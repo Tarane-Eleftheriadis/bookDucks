@@ -16,7 +16,6 @@ const renderPageSavedBooks = async () => {
         savedBookCard.classList.add("bookCard", "savedBookCard");
 
         const book = item.book;
-        // const imgUrl = baseUrl + book.image.url;
 
         savedBookCard.innerHTML = `
             

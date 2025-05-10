@@ -1,10 +1,10 @@
 const createLoginheader = () => {
     const loginDiv = document.querySelector("#loginDiv");
 
-    const user = JSON.parse(localStorage.getItem("user")); // Hämta användaren från localStorage
+    const user = JSON.parse(localStorage.getItem("user"));
 
     if (!user) {
-        return; // Om ingen användare är inloggad, gör inget
+        return;
     }
 
     loginDiv.innerHTML = `
@@ -23,7 +23,7 @@ const createLoginheader = () => {
     const logout = document.querySelector("#logoutBtn");
     logout.addEventListener("click", () => {
         localStorage.removeItem("jwt");
-        localStorage.removeItem("user"); // Ta bort användaren också
+        localStorage.removeItem("user");
         window.location.href = "index.html";
     });
 
@@ -32,8 +32,7 @@ const createLoginheader = () => {
     });
 };
 
-// Kontrollera om JWT finns och om användaren är inloggad
 const jwt = localStorage.getItem("jwt");
 if (jwt) {
-    createLoginheader(); // Använd den lagrade användardatan från localStorage
+    createLoginheader();
 }
