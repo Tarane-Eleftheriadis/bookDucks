@@ -53,7 +53,7 @@ const renderPage = async () => {
             await axios.post(`${baseUrl}/api/saveds`, {
                 data: {
                     book: bookId,
-                    users_permissions_user: user.id
+                    user: user.id
                 }
             }, {
                 headers: { Authorization: `Bearer ${jwt}` }
