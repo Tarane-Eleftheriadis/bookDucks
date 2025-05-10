@@ -5,7 +5,7 @@ const getDataSavedBooks = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const jwt = localStorage.getItem("jwt");
     
-    const respons = await axios.get(`${baseUrl}/api/saveds?filters[user][id][$eq]=${user.id}&populate=*`,
+    const respons = await axios.get(`${baseUrl}/api/saveds?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`,
         {
             headers: {
                 Authorization: `Bearer ${jwt}`
@@ -21,11 +21,13 @@ const renderPageSavedBooks = async () => {
 
     books.forEach(item => {
         const book = item.book;
+        const imgUrl = baseUrl + book.image.url;
 
         const savedBookCard = document.createElement("div");
         savedBookCard.classList.add("bookCard", "savedBookCard");
 
         savedBookCard.innerHTML = `
+            <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
             <h2>${book.title}</h2>
             <p>${book.author}</p>
             <p>Antal sidor: ${book.pages}</p>
