@@ -1,24 +1,23 @@
 const savedBooksDiv = document.querySelector("#savedBooksDivContainer");
+const sortSavedBooksDropdown = document.querySelector("#sortSavedBooks");
 const baseUrl = "http://localhost:1337";
 
 const getDataSavedBooks = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const jwt = localStorage.getItem("jwt");
     
-    const respons = await axios.get(`${baseUrl}/api/saveds?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`,
-        {
-            headers: {
-                Authorization: `Bearer ${jwt}`
-            }
+    const respons = await axios.get(`${baseUrl}/api/saveds?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`, {
+        headers: {
+            Authorization: `Bearer ${jwt}`
         }
-    );
+    });
     console.log("Sparade böcker:", respons.data);
     return respons.data.data;
 };
 
-const renderPageSavedBooks = async () => {
-    const books = await getDataSavedBooks();
-
+const renderPageSavedBooks = (books) => {
+    savedBooksDiv.innerHTML = "";
+    
     books.forEach(item => {
         const book = item.book;
         const imgUrl = baseUrl + book.image.url;
@@ -42,6 +41,29 @@ const renderPageSavedBooks = async () => {
     });
 };
 
-renderPageSavedBooks();
+const deleteSavedBook = () => {
+    document.querySelector(".remove-btn").addEventListener("click", () => {
+        savedBookCard.remove();
+    })
+}
+
+// Hämta böcker och rendera direkt
+getDataSavedBooks().then(books => {
+    renderPageSavedBooks(books);
+});
+
+sortSavedBooksDropdown.addEventListener("change", async () => {
+    const selectValue = sortSavedBooksDropdown.value;
+    let books = await getDataSavedBooks();
+
+    if (selectValue === "author") {
+        books.sort((a, b) => a.book.author.localeCompare(b.book.author));
+    } else if (selectValue === "title") {
+        books.sort((a, b) => a.book.title.localeCompare(b.book.title));
+    }
+
+    renderPageSavedBooks(books);
+});
+
 getDisplayColor();
 createLoginheader();
