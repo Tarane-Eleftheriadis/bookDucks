@@ -5,19 +5,22 @@ const baseUrl = "http://localhost:1337";
 const getDataSavedBooks = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const jwt = localStorage.getItem("jwt");
-    
-    const respons = await axios.get(`${baseUrl}/api/saveds?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`, {
-        headers: {
-            Authorization: `Bearer ${jwt}`
+
+    const respons = await axios.get(
+        `${baseUrl}/api/saveds?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`,
+        {
+            headers: {
+                Authorization: `Bearer ${jwt}`
+            }
         }
-    });
+    );
     console.log("Sparade böcker:", respons.data);
     return respons.data.data;
 };
 
 const renderPageSavedBooks = (books) => {
     savedBooksDiv.innerHTML = "";
-    
+
     books.forEach(item => {
         const book = item.book;
         const imgUrl = baseUrl + book.image.url;
@@ -37,17 +40,31 @@ const renderPageSavedBooks = (books) => {
             </button>
         `;
 
+        const deleteBtn = savedBookCard.querySelector(".remove-btn");
+        deleteBtn.addEventListener("click", async () => {
+            const jwt = localStorage.getItem("jwt");
+
+            try {
+                const response = await axios.delete(`${baseUrl}/api/saveds/${item.id}`, {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`
+                    }
+                });
+
+                console.log("Boken raderades från API:", response);
+                console.log(item.id)
+                savedBookCard.remove();
+            } catch (error) {
+                console.error("Kunde inte radera bok från API:", error.response?.data || error.message);
+                
+                alert("Det gick inte att radera boken. Kontrollera om du är inloggad och har rätt behörigheter.");
+            }
+        });
+
         savedBooksDiv.append(savedBookCard);
     });
 };
 
-const deleteSavedBook = () => {
-    document.querySelector(".remove-btn").addEventListener("click", () => {
-        savedBookCard.remove();
-    })
-}
-
-// Hämta böcker och rendera direkt
 getDataSavedBooks().then(books => {
     renderPageSavedBooks(books);
 });
@@ -67,3 +84,5 @@ sortSavedBooksDropdown.addEventListener("change", async () => {
 
 getDisplayColor();
 createLoginheader();
+
+
