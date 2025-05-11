@@ -173,7 +173,7 @@ input:-webkit-autofill {
     font-weight: 300;
     text-align: center;
 }
-.saved-books-div-container{
+.saved-books-div-container, .rated-books-div-container{
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
@@ -183,7 +183,7 @@ input:-webkit-autofill {
     flex: 0 0 auto;
     width: 170px;
 }
-.sort-saved-books{
+.sort-saved-books, .sort-rated-books{
     height: 2rem;
     border-radius: 5px;
     margin: 1% 10%;
@@ -218,4 +218,7 @@ input:-webkit-autofill {
 }
 .remove-btn:hover{
     border: 1px solid red;
+}
+.rated-books-div-container{
+    margin-bottom: 10%;
 }

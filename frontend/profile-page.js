@@ -45,7 +45,7 @@ const renderPageSavedBooks = (books) => {
             const jwt = localStorage.getItem("jwt");
 
             try {
-                const response = await axios.delete(`${baseUrl}/api/saveds/${item.id}`, {
+                const response = await axios.delete(`${baseUrl}/api/saveds/${item.documentId}`, {
                     headers: {
                         Authorization: `Bearer ${jwt}`
                     }
@@ -80,6 +80,66 @@ sortSavedBooksDropdown.addEventListener("change", async () => {
     }
 
     renderPageSavedBooks(books);
+});
+
+const ratedBooksDiv = document.querySelector("#ratedBooksDivContainer");
+
+const getUserRatedBooks = async () => {
+    const jwt = localStorage.getItem("jwt");
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    const raitings = await axios.get(`${baseUrl}/api/ratings?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`, {
+        headers: { Authorization: `Bearer ${jwt}` }
+    });
+
+    return raitings.data.data;
+};
+
+const renderRatedBooks = (raitings) => {
+    ratedBooksDiv.innerHTML= "";
+
+    raitings.forEach(item => {
+        const book = item.book;
+        const imgUrl = baseUrl + book.image.url;
+
+        const ratedBookCard = document.createElement("div");
+        ratedBookCard.classList.add("bookCard", "ratedBookCard");
+
+        ratedBookCard.innerHTML = `
+            <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
+            <h2>${book.title}</h2>
+            <p>${book.author}</p>
+            <p>Antal sidor: ${book.pages}</p>
+            <p>Utg.datum: ${book.releaseDate}</p>
+            <p><strong>Ditt betyg:</strong> ${item.value}<img src="/star-f.png"></p>
+        `;
+
+        ratedBooksDiv.append(ratedBookCard);
+    });
+};
+const ratedBooksDropdown = document.querySelector("#sortRatedBooks")
+
+ratedBooksDropdown.addEventListener("change", async () => {
+    const ratedBooksvalue = ratedBooksDropdown.value;
+    let books = await getUserRatedBooks();
+
+    if (ratedBooksvalue === "author") {
+        books.sort((a, b) => a.book.author.localeCompare(b.book.author));
+    } else if (ratedBooksvalue === "title") {
+        books.sort((a, b) => a.book.title.localeCompare(b.book.title));
+    }
+
+    renderRatedBooks(books);
+});
+
+// Start
+getDataSavedBooks().then(books => {
+    renderPageSavedBooks(books);
+});
+
+getUserRatedBooks().then(ratings => {
+    console.log("Betygsatta böcker:", ratings);
+    renderRatedBooks(ratings);
 });
 
 getDisplayColor();

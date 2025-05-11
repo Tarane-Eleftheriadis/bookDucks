@@ -58,6 +58,9 @@ const renderPage = async () => {
             }, {
                 headers: { Authorization: `Bearer ${jwt}` }
             });
+
+            const img = btn.querySelector("img");
+            img.src = "/favorite-filled.png";
         });
     });
 };
