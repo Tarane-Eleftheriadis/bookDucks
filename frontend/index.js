@@ -1,10 +1,10 @@
+import { baseUrl, getLoggedInUser, createLoginheader, getDisplayColor } from "./utils.js";
+
 const bookDiv = document.querySelector("#bookDivContainer");
-const baseUrl = "http://localhost:1337";
 
 const getData = async () => {
     const respons = await axios.get(`${baseUrl}/api/books?populate=*`);
     const data = respons.data;
-    console.log(data);
     return data;
 };
 
@@ -13,22 +13,26 @@ const renderPage = async () => {
 
     books.data.forEach(book => {
         const bookCard = document.createElement("div");
-        bookCard.classList.add("bookCard")
+        bookCard.classList.add("bookCard");
         const imgUrl = baseUrl + book.image.url;
 
         bookCard.innerHTML = `
             <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
             <h2>${book.title}</h2>
-            <p> ${book.author}</p>
+            <p>${book.author}</p>
             <p>Antal sidor: ${book.pages}</p>
-            <p>Utg.datum: ${book.releaseDate}</P>
+            <p>Utg.datum: ${book.releaseDate}</p>
             <p>Betyg: ${book.rating}</p>
             <div class="heart-and-raiting-container">
-                <div class="rating" data-id="${book.id}">
-                ${[1, 2, 3, 4, 5].map(i => `<span class="star" data-rating="${i}">&#9733;</span>`).join("")}
+                <div class="rating" data-id="${book.documentId}">
+                    <span class="fa fa-star" data-rating="1"></span>
+                    <span class="fa fa-star" data-rating="2"></span>
+                    <span class="fa fa-star" data-rating="3"></span>
+                    <span class="fa fa-star" data-rating="4"></span>
+                    <span class="fa fa-star" data-rating="5"></span>
                 </div>
                 <button class="to-read-btn" data-id="${book.id}">
-                <img src="/favorite2.png" />
+                    <img src="/favorite2.png" />
                 </button>
             </div>
         `;
@@ -40,11 +44,10 @@ const renderPage = async () => {
 
     toReadBtns.forEach(btn => {
         btn.addEventListener("click", async () => {
-            const bookId = Number(btn.getAttribute("data-id"));
-            console.log(bookId);
-
+            const bookId = Number(btn.dataset.id);
             const jwt = localStorage.getItem("jwt");
-            const user = JSON.parse(localStorage.getItem("user"));
+            const user = await getLoggedInUser();
+
             if (!jwt) {
                 alert("Du måste vara inloggad för att lägga till i läsa-listan.");
                 return;
@@ -65,6 +68,50 @@ const renderPage = async () => {
     });
 };
 
+const handleRatings = () => {
+    const ratingContainers = document.querySelectorAll(".rating");
+
+    ratingContainers.forEach(container => {
+        const stars = container.querySelectorAll(".fa-star");
+
+        stars.forEach(star => {
+            star.addEventListener("click", async () => {
+                const ratingValue = Number(star.getAttribute("data-rating"));
+                console.log(ratingValue)
+                const bookId = container.getAttribute("data-id");
+                console.log(bookId)
+                const jwt = localStorage.getItem("jwt");
+                console.log(jwt)
+                const user = await getLoggedInUser();
+
+                if (!jwt) {
+                    alert("Du måste vara inloggad för att sätta betyg.");
+                    return;
+                }
+                
+                await axios.post(`${baseUrl}/api/ratings`, {
+                    data: {
+                        value: ratingValue,
+                        documentId: bookId,
+                        user: user.id
+                    }
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`
+                    }
+                });
+                
+                stars.forEach(s => {
+                    const current = Number(s.getAttribute("data-rating"));
+                    s.classList.toggle("checked", current <= ratingValue);
+                    });
+
+                    alert("Betyg sparat!");
+            });
+        });
+    });
+};
+
 const openModalBtn = document.querySelector("#loginDiv");
 const closeModalBtn = document.querySelector("#closeModalBtn");
 const loginModal = document.querySelector("#loginModal");
@@ -72,11 +119,9 @@ const loginModal = document.querySelector("#loginModal");
 openModalBtn.addEventListener("click", () => {
     loginModal.style.display = "flex";
 });
-
 closeModalBtn.addEventListener("click", () => {
     loginModal.style.display = "none";
 });
-
 window.addEventListener("click", (event) => {
     if (event.target === loginModal) {
         loginModal.style.display = "none";
@@ -91,8 +136,7 @@ document.querySelector("#createAccountBtn").addEventListener("click", () => {
     registerView.style.display = "block";
 });
 
-//INLOGGNING
-
+// Inloggning
 document.querySelector("#loginAccountBtn").addEventListener("click", async () => {
     const loginUsername = document.querySelector("#loginUsername").value;
     const loginPassword = document.querySelector("#loginPassword").value;
@@ -105,9 +149,6 @@ document.querySelector("#loginAccountBtn").addEventListener("click", async () =>
     const jwt = response.data.jwt;
     const user = response.data.user;
 
-    console.log("Inloggad som:", user.username);
-    console.log("JWT-token:", jwt);
-
     localStorage.setItem("jwt", jwt);
     localStorage.setItem("user", JSON.stringify(user));
 
@@ -117,25 +158,26 @@ document.querySelector("#loginAccountBtn").addEventListener("click", async () =>
     createLoginheader(user);
 });
 
-//REGISTRERING
-
+// Registrering
 document.querySelector("#saveNewAccountBtn").addEventListener("click", async () => {
     const username = document.querySelector("#username").value;
     const email = document.querySelector("#email").value;
     const password = document.querySelector("#password").value;
-    
+
     const response = await axios.post(`${baseUrl}/api/auth/local/register`, {
         username,
         email,
-        password,
+        password
     });
 
     alert("Konto skapades! Du kan nu logga in.");
-
     registerView.style.display = "none";
     loginView.style.display = "block";
 });
 
-renderPage();
+renderPage().then(() => {
+    handleRatings();
+});
+
 getDisplayColor();
 createLoginheader();

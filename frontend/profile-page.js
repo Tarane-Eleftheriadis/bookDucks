@@ -1,9 +1,10 @@
+import { baseUrl, getLoggedInUser, createLoginheader, getDisplayColor } from "./utils.js";
+
 const savedBooksDiv = document.querySelector("#savedBooksDivContainer");
 const sortSavedBooksDropdown = document.querySelector("#sortSavedBooks");
-const baseUrl = "http://localhost:1337";
 
 const getDataSavedBooks = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = await getLoggedInUser();
     const jwt = localStorage.getItem("jwt");
 
     const respons = await axios.get(
@@ -86,7 +87,8 @@ const ratedBooksDiv = document.querySelector("#ratedBooksDivContainer");
 
 const getUserRatedBooks = async () => {
     const jwt = localStorage.getItem("jwt");
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = await getLoggedInUser();
+
 
     const raitings = await axios.get(`${baseUrl}/api/ratings?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`, {
         headers: { Authorization: `Bearer ${jwt}` }
@@ -127,6 +129,8 @@ ratedBooksDropdown.addEventListener("change", async () => {
         books.sort((a, b) => a.book.author.localeCompare(b.book.author));
     } else if (ratedBooksvalue === "title") {
         books.sort((a, b) => a.book.title.localeCompare(b.book.title));
+    } else if (ratedBooksvalue === "rating") {
+        books.sort((a, b) => b.book.rating - a.book.rating);
     }
 
     renderRatedBooks(books);

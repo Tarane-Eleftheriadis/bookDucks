@@ -8,9 +8,9 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="profile-page.js" defer></script>
-        <script src="theme.js" defer></script>
-        <script src="header.js" defer></script>
+        
+        <script type="module" src="profile-page.js" defer></script>
+        <script type="module" src="utils.js" defer></script>
         <link rel="stylesheet" href="style.css">
     </head>
 <body>
@@ -67,6 +67,7 @@
             <option value="" disabled selected>Sortera</option>
             <option value="author">Författare A-Ö</option>
             <option value="title">Title A-Ö</option>
+            <option value="rating">Betyg (högt till långt)</option>
         </select>
     </div>
     <div class="rated-books-div-container" id="ratedBooksDivContainer"></div>

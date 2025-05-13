@@ -196,7 +196,7 @@ input:-webkit-autofill {
     cursor: pointer;
   }
   
-  .star {
+  .fa fa-star {
     font-size: 20px;
     color: lightgray;
     transition: color 0.2s;
@@ -222,3 +222,6 @@ input:-webkit-autofill {
 .rated-books-div-container{
     margin-bottom: 10%;
 }
+.checked {
+    color: orange;
+  }
