@@ -52,7 +52,5 @@ const getDisplayColor = async () => {
     document.body.classList.add(colorTheme);
 };
   
-getDisplayColor();
-createLoginheader();
 
 export { baseUrl, getLoggedInUser, createLoginheader, getDisplayColor };

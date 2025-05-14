@@ -10,9 +10,7 @@ const getDataSavedBooks = async () => {
     const respons = await axios.get(
         `${baseUrl}/api/saveds?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`,
         {
-            headers: {
-                Authorization: `Bearer ${jwt}`
-            }
+            headers: { Authorization: `Bearer ${jwt}` }
         }
     );
     console.log("Sparade böcker:", respons.data);
@@ -35,7 +33,7 @@ const renderPageSavedBooks = (books) => {
             <p>${book.author}</p>
             <p>Antal sidor: ${book.pages}</p>
             <p>Utg.datum: ${book.releaseDate}</p>
-            <p>Betyg: ${book.rating}</p>
+            <p>Betyg: ${item.value}</p>
             <button class="remove-btn" data-id="${item.id}">
                 <img src="/delete_red.png" />
             </button>
@@ -65,10 +63,6 @@ const renderPageSavedBooks = (books) => {
         savedBooksDiv.append(savedBookCard);
     });
 };
-
-getDataSavedBooks().then(books => {
-    renderPageSavedBooks(books);
-});
 
 sortSavedBooksDropdown.addEventListener("change", async () => {
     const selectValue = sortSavedBooksDropdown.value;
@@ -130,7 +124,7 @@ ratedBooksDropdown.addEventListener("change", async () => {
     } else if (ratedBooksvalue === "title") {
         books.sort((a, b) => a.book.title.localeCompare(b.book.title));
     } else if (ratedBooksvalue === "rating") {
-        books.sort((a, b) => b.book.rating - a.book.rating);
+        books.sort((a, b) => b.value - a.value);
     }
 
     renderRatedBooks(books);
