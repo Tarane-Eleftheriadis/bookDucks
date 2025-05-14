@@ -24,7 +24,7 @@ const renderPage = async () => {
             <p>Utg.datum: ${book.releaseDate}</p>
             <p>Betyg: ${book.rating}</p>
             <div class="heart-and-raiting-container">
-                <div class="rating" data-id="${book.documentId}">
+                <div class="rating" data-id="${book.id}">
                     <span class="fa fa-star" data-rating="1"></span>
                     <span class="fa fa-star" data-rating="2"></span>
                     <span class="fa fa-star" data-rating="3"></span>
@@ -92,7 +92,7 @@ const handleRatings = () => {
                 await axios.post(`${baseUrl}/api/ratings`, {
                     data: {
                         value: ratingValue,
-                        documentId: bookId,
+                        book: bookId,
                         user: user.id
                     }
                 }, {
@@ -101,12 +101,7 @@ const handleRatings = () => {
                     }
                 });
                 
-                stars.forEach(s => {
-                    const current = Number(s.getAttribute("data-rating"));
-                    s.classList.toggle("checked", current <= ratingValue);
-                    });
-
-                    alert("Betyg sparat!");
+                alert("Betyg sparat!");
             });
         });
     });

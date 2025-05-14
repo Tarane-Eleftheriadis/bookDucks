@@ -196,16 +196,6 @@ input:-webkit-autofill {
     cursor: pointer;
   }
   
-  .fa fa-star {
-    font-size: 20px;
-    color: lightgray;
-    transition: color 0.2s;
-  }
-  
-  .star.hover,
-  .star.selected {
-    color: gold;
-  }
 .heart-and-raiting-container{
     display: flex;
     justify-content: space-between;
@@ -222,6 +212,14 @@ input:-webkit-autofill {
 .rated-books-div-container{
     margin-bottom: 10%;
 }
+span.fa.fa-star {
+    font-size: 20px;
+    color: lightgray;
+    transition: color 0.2s;
+  }
 .checked {
+    color: orange;
+  }
+  .fa.fa-star:hover{
     color: orange;
   }

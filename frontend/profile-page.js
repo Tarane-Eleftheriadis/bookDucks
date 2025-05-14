@@ -85,7 +85,7 @@ sortSavedBooksDropdown.addEventListener("change", async () => {
 
 const ratedBooksDiv = document.querySelector("#ratedBooksDivContainer");
 
-const getUserRatedBooks = async () => {
+const getRatedBooks = async () => {
     const jwt = localStorage.getItem("jwt");
     const user = await getLoggedInUser();
 
@@ -113,7 +113,7 @@ const renderRatedBooks = (raitings) => {
             <p>${book.author}</p>
             <p>Antal sidor: ${book.pages}</p>
             <p>Utg.datum: ${book.releaseDate}</p>
-            <p><strong>Ditt betyg:</strong> ${item.value}<img src="/star-f.png"></p>
+            <p><strong>Ditt betyg:</strong> ${item.value}&#9734;</p>
         `;
 
         ratedBooksDiv.append(ratedBookCard);
@@ -123,7 +123,7 @@ const ratedBooksDropdown = document.querySelector("#sortRatedBooks")
 
 ratedBooksDropdown.addEventListener("change", async () => {
     const ratedBooksvalue = ratedBooksDropdown.value;
-    let books = await getUserRatedBooks();
+    let books = await getRatedBooks();
 
     if (ratedBooksvalue === "author") {
         books.sort((a, b) => a.book.author.localeCompare(b.book.author));
@@ -136,12 +136,11 @@ ratedBooksDropdown.addEventListener("change", async () => {
     renderRatedBooks(books);
 });
 
-// Start
 getDataSavedBooks().then(books => {
     renderPageSavedBooks(books);
 });
 
-getUserRatedBooks().then(ratings => {
+getRatedBooks().then(ratings => {
     console.log("Betygsatta böcker:", ratings);
     renderRatedBooks(ratings);
 });
