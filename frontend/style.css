@@ -247,3 +247,13 @@ hr{
     width: 50%;
     margin: auto;
 }
+.link-text{
+    text-decoration: none;
+    color: black;
+}
+.heart-icon{
+    color: lightgray;
+}
+.heart-icon:hover{
+    color: red;
+}

@@ -32,7 +32,7 @@ const renderPage = async () => {
                     <span class="fa fa-star" data-rating="5"></span>
                 </div>
                 <button class="to-read-btn" data-id="${book.id}">
-                    <img src="/favorite2.png" />
+                    <span style='font-size:25px;' class="heart-icon">&#9825;</span>
                 </button>
             </div>
         `;
@@ -62,8 +62,8 @@ const renderPage = async () => {
                 headers: { Authorization: `Bearer ${jwt}` }
             });
 
-            const img = btn.querySelector("img");
-            img.src = "/favorite-filled.png";
+            const heart = btn.querySelector(".heart-icon");
+            heart.style.color = "red";
         });
     });
 };
