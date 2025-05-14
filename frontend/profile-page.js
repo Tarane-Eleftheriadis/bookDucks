@@ -107,7 +107,7 @@ const renderRatedBooks = (raitings) => {
             <p>${book.author}</p>
             <p>Antal sidor: ${book.pages}</p>
             <p>Utg.datum: ${book.releaseDate}</p>
-            <p><strong>Ditt betyg:</strong> ${item.value}&#9734;</p>
+            <p><strong>Ditt betyg:</strong> ${item.value}<span style='font-size:20px;'>&#9734;</span></p>
         `;
 
         ratedBooksDiv.append(ratedBookCard);
