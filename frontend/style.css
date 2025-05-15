@@ -28,6 +28,25 @@ body.color{
 .header-login-div img {
     width: 2rem;
 }
+.search-input-fake{
+    width: 16vw;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid grey;
+    padding: 2%;
+}
+.search-btn-fake{
+    width: 50px;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+    padding: 2%;
+    cursor: pointer;
+}
+.logo-container{
+    display: flex;
+    align-items: center;
+}
 .home-logo{
     color: black;
     text-decoration: none;
