@@ -3,8 +3,15 @@
     font-family: "Inter", sans-serif;
     margin: 0;
 }
+:root {
+    --darkblue: #15063fe2;
+    --lightgrey: #f7f6f2;
+    --white: #ffffff;
+    --yellow: #fecf4ece;
+    --font-color-grey: #808080;
+}
 body.light{
-    background-color: #f7f6f2;
+    background-color: var(--lightgrey);
 }
 body.dark{
     background-color: black;
@@ -16,7 +23,7 @@ body.color{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: white;
+    background-color: var(--darkblue);
     padding: 1% 15%;
 }
 .header-login-div{
@@ -28,11 +35,17 @@ body.color{
 .header-login-div img {
     width: 2rem;
 }
+h1{
+    color: var(--white);
+}
+.log-span{
+    color: var(--white);
+}
 .search-input-fake{
     width: 16vw;
     height: 30px;
     border-radius: 10px;
-    border: 1px solid grey;
+    border: 1px solid var(--lightgrey);
     padding: 2%;
 }
 .search-btn-fake{
@@ -48,7 +61,7 @@ body.color{
     align-items: center;
 }
 .home-logo{
-    color: black;
+    color: var(--white);
     text-decoration: none;
 }
 .book-div-container{
@@ -61,7 +74,7 @@ body.color{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: white;
+    background-color: var(--white);
     width: 170px;
     padding: 1rem;
     margin: 0.5rem;
@@ -77,7 +90,7 @@ body.color{
     font-size: 1rem;
 }
 .bookCard p{
-    color: #808080;
+    color: var(--font-color-grey);
     margin: 0;
     font-size: 0.755rem;
 }
@@ -95,7 +108,7 @@ body.color{
     backdrop-filter: blur(4px);
   }
 .modal-container{
-    background-color: #fff;
+    background-color: var(--white);
     padding: 2rem;
     border-radius: 8px;
     width: 90%;
@@ -113,7 +126,7 @@ body.color{
     right: 15px;
     font-size: 1.5rem;
     cursor: pointer;
-    color: #aaa;
+    color: var(--font-color-grey);
 }
 
 .modal-container h2{
@@ -125,15 +138,15 @@ body.color{
     padding: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--font-color-grey);
     border-radius: 5px;
 }
 
 .button{
     width: 100%;
     padding: 10px;
-    background-color: #4f7962;
-    color: white;
+    background-color: var(--yellow);
+    color: var(--white);
     border: none;
     border-radius: 5px;
     font-size: 1rem;
@@ -146,9 +159,9 @@ body.color{
     margin-top: 3rem;
 }
 .create-account-btn{
-    background-color: white;
-    color: #4f7962;
-    border: solid 2px #4f7962;
+    background-color: var(--white);
+    color: var(--font-color-grey);
+    border: solid 2px var(--yellow);
     margin-top: 1rem;
 }
 .create-account-btn:hover {
@@ -182,7 +195,7 @@ input:-webkit-autofill {
 }
 
 .saved-books-h2-container, .rated-books-h2-container{
-    background-color: #e6e6e6;
+    background-color: var(--yellow);
     border: none;
     margin-top: 2%;
     width: 80%;
@@ -207,7 +220,7 @@ input:-webkit-autofill {
     height: 2rem;
     border-radius: 5px;
     margin: 1% 10%;
-    border: 1px solid lightgrey;
+    border: 1px solid var(--lightgrey);
 
 }
 .rating {
@@ -234,17 +247,14 @@ input:-webkit-autofill {
 }
 span.fa.fa-star {
     font-size: 20px;
-    color: lightgray;
+    color: var(--font-color-grey);
     transition: color 0.2s;
-  }
-.checked {
-    color: orange;
   }
   .fa.fa-star:hover{
     color: orange;
   }
 .footer-container{
-    background-color: white;
+    background-color: var(--darkblue);
     padding: 1%;
 }
 .footer-loggo-container{
@@ -259,7 +269,6 @@ span.fa.fa-star {
     justify-content: center;
     gap: 2%;
     text-decoration: none;
-    color: black;
     padding-top: 1%;
 }
 hr{
@@ -268,10 +277,11 @@ hr{
 }
 .link-text{
     text-decoration: none;
-    color: black;
+    color: var(--white);
+    font-size: small;
 }
 .heart-icon{
-    color: lightgray;
+    color: var(--font-color-grey);
 }
 .heart-icon:hover{
     color: red;

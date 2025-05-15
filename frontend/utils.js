@@ -21,12 +21,12 @@ const createLoginheader = async () => {
     loginDiv.innerHTML = `
         <div class="loggedinUserHeader">
             <button class="user-account-btn" id="profilePage">
-                <img src="/login1.png" />
-                <span>${user.username}'s konto</span>
+                <img src="/login-white.png" />
+                <span class="log-span">${user.username}'s konto</span>
             </button>
             <button class="user-account-btn" id="logoutBtn">
-                <img src="/logout.png" />
-                <span>Logga ut</span>
+                <img src="/logout-white.png" />
+                <span class="log-span">Logga ut</span>
             </button>
         </div>
     `;
