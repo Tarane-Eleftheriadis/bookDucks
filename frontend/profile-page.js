@@ -1,30 +1,7 @@
-import { baseUrl, getLoggedInUser, createLoginheader, getDisplayColor } from "./utils.js";
+import { baseUrl, getLoggedInUser, createLoginheader, getDisplayColor, getAverageRating, getAverageRatingForBook } from "./utils.js";
 
 const savedBooksDiv = document.querySelector("#savedBooksDivContainer");
 const sortSavedBooksDropdown = document.querySelector("#sortSavedBooks");
-
-const getAverageRating = async (ratings) => {
-  if (!ratings || ratings.length === 0) return null;
-  let totalSum = 0;
-  for (let i = 0; i < ratings.length; i++) {
-    totalSum += ratings[i].value;
-  }
-  return totalSum / ratings.length;
-};
-
-const getAverageRatingForBook = async (bookId) => {
-  const jwt = localStorage.getItem("jwt");
-  try {
-    const response = await axios.get(`${baseUrl}/api/ratings?filters[book][id][$eq]=${bookId}`, {
-      headers: { Authorization: `Bearer ${jwt}` },
-    });
-    const ratings = response.data.data;
-    return await getAverageRating(ratings);
-  } catch (error) {
-    console.error("Kunde inte hämta betyg för bok:", bookId, error);
-    return null;
-  }
-};
 
 const getDataSavedBooks = async () => {
   const user = await getLoggedInUser();
@@ -58,7 +35,7 @@ const renderPageSavedBooks = async (books) => {
       <p>${book.author}</p>
       <p>Antal sidor: ${book.pages}</p>
       <p>Utg.datum: ${book.releaseDate}</p>
-      <p>Betyg: ${average !== null ? average.toFixed(1) : "Ej betygsatt"}</p>
+      <p>Snittbetyg: ${average !== null ? average.toFixed(1) : "Ej betygsatt"}</p>
       <button class="remove-btn" data-id="${item.id}">
         <img src="/delete_red.png" />
       </button>
@@ -68,7 +45,7 @@ const renderPageSavedBooks = async (books) => {
     deleteBtn.addEventListener("click", async () => {
       try {
         const jwt = localStorage.getItem("jwt");
-        await axios.delete(`${baseUrl}/api/saveds/${item.id}`, {
+        await axios.delete(`${baseUrl}/api/saveds/${item.documentId}`, {
           headers: { Authorization: `Bearer ${jwt}` },
         });
         savedBookCard.remove();
@@ -125,6 +102,7 @@ const renderRatedBooks = (ratings) => {
       <p>Antal sidor: ${book.pages}</p>
       <p>Utg.datum: ${book.releaseDate}</p>
       <p><strong>Ditt betyg:</strong> ${item.value}<span style='font-size:20px;'>&#9734;</span></p>
+      
     `;
 
     ratedBooksDiv.append(ratedBookCard);
@@ -154,6 +132,9 @@ ratedBooksDropdown.addEventListener("change", async () => {
   renderRatedBooks(ratings);
 })();
 
+
+getAverageRating();
+getAverageRatingForBook();
 getDisplayColor();
 createLoginheader();
 

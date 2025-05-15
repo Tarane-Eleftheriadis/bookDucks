@@ -52,5 +52,24 @@ const getDisplayColor = async () => {
     document.body.classList.add(colorTheme);
 };
   
+const getAverageRating = async (ratings) => {
+    if (!ratings || ratings.length === 0) return null;
+    let totalSum = 0;
+    for (let i = 0; i < ratings.length; i++) {
+      totalSum += ratings[i].value;
+    }
+    return totalSum / ratings.length;
+  };
+  
+  const getAverageRatingForBook = async (bookId) => {
+    try {
+        const response = await axios.get(`${baseUrl}/api/ratings?filters[book][id][$eq]=${bookId}`);
+        const ratings = response.data.data;
+        return await getAverageRating(ratings);
+    } catch (error) {
+        console.error("Kunde inte hämta betyg för bok:", bookId, error);
+        return null;
+    }
+};
 
-export { baseUrl, getLoggedInUser, createLoginheader, getDisplayColor };
+export { baseUrl, getLoggedInUser, createLoginheader, getDisplayColor, getAverageRating, getAverageRatingForBook };

@@ -1,4 +1,4 @@
-import { baseUrl, getLoggedInUser, createLoginheader, getDisplayColor } from "./utils.js";
+import { baseUrl, getLoggedInUser, createLoginheader, getDisplayColor, getAverageRating, getAverageRatingForBook } from "./utils.js";
 
 const bookDiv = document.querySelector("#bookDivContainer");
 
@@ -11,18 +11,21 @@ const getData = async () => {
 const renderPage = async () => {
     let books = await getData();
 
-    books.data.forEach(book => {
+    for (const book of books.data) {
         const bookCard = document.createElement("div");
         bookCard.classList.add("bookCard");
         const imgUrl = baseUrl + book.image.url;
-
+        const bookId = book.id;
+    
+        const average = await getAverageRatingForBook(bookId);
+    
         bookCard.innerHTML = `
             <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
             <h2>${book.title}</h2>
             <p>${book.author}</p>
             <p>Antal sidor: ${book.pages}</p>
             <p>Utg.datum: ${book.releaseDate}</p>
-            <p>Betyg: ${book.rating}</p>
+            <p>Snittbetyg: ${average !== null ? average.toFixed(1) : "Ej betygsatt"}</p>
             <div class="heart-and-raiting-container">
                 <div class="rating" data-id="${book.id}">
                     <span class="fa fa-star" data-rating="1"></span>
@@ -36,9 +39,10 @@ const renderPage = async () => {
                 </button>
             </div>
         `;
-
+    
         bookDiv.append(bookCard);
-    });
+    }
+    
 
     const toReadBtns = document.querySelectorAll(".to-read-btn");
 
@@ -67,27 +71,6 @@ const renderPage = async () => {
         });
     });
 };
-
-const getAverageRating = async () => {
-    const ratingsData = await axios.get(`${baseUrl}/api/ratings?populate=*`);
-    console.log(ratingsData);
-
-    const ratings = ratingsData.data.data.map(item => item.value);
-    console.log(ratings);
-
-    if (ratings.length === 0) {
-        console.log("Inga betyg hittades.");
-        return;
-    }
-
-    const total = ratings.reduce((sum, rating) => sum + rating, 0);
-    const averageRating = total / ratings.length;
-
-    console.log("Medelbetyg:", averageRating.toFixed(2));
-    return averageRating;
-}
-
-getAverageRating();
 
 const handleRatings = () => {
     const ratingContainers = document.querySelectorAll(".rating");
@@ -122,7 +105,7 @@ const handleRatings = () => {
                     }
                 });
                 
-                alert("Betyg sparat!");
+                star.style.color = "orange";
             });
         });
     });
@@ -195,5 +178,7 @@ renderPage().then(() => {
     handleRatings();
 });
 
+getAverageRating();
+getAverageRatingForBook();
 getDisplayColor();
 createLoginheader();

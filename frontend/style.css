@@ -12,12 +12,20 @@
 }
 body.light{
     background-color: var(--lightgrey);
+    --darkblue: #15063fe2;
+    --lightgrey: #f7f6f2;
+    --white: #ffffff;
+    --yellow: #fecf4ece;
+    --font-color-grey: #808080;
 }
 body.dark{
-    background-color: black;
+    background-color: rgb(4, 0, 44);
+    --darkblue: #fecf4ece;
 }
 body.color{
-    background-color: #fbf6de;
+    background-image: url("/logo.png");
+    background-size: 100px;
+    background-repeat: repeat;
 }
 .header-container{
     display: flex;
@@ -141,7 +149,6 @@ h1{
     border: 1px solid var(--font-color-grey);
     border-radius: 5px;
 }
-
 .button{
     width: 100%;
     padding: 10px;
@@ -187,8 +194,6 @@ input:-webkit-autofill {
     border: none;
     cursor: pointer;
 }
-
-/* Profile-page */
 .saved-books, .rated-books{
     display: flex;
     justify-content: center;
@@ -212,7 +217,7 @@ input:-webkit-autofill {
     scroll-behavior: smooth;
     margin: 0 10%;
 }
-.savedBookCard{
+.savedBookCard, .ratedBookCard{
     flex: 0 0 auto;
     width: 170px;
 }
@@ -221,7 +226,6 @@ input:-webkit-autofill {
     border-radius: 5px;
     margin: 1% 10%;
     border: 1px solid var(--lightgrey);
-
 }
 .rating {
     display: flex;
@@ -286,3 +290,4 @@ hr{
 .heart-icon:hover{
     color: red;
 }
+
