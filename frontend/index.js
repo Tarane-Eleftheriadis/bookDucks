@@ -68,6 +68,27 @@ const renderPage = async () => {
     });
 };
 
+const getAverageRating = async () => {
+    const ratingsData = await axios.get(`${baseUrl}/api/ratings?populate=*`);
+    console.log(ratingsData);
+
+    const ratings = ratingsData.data.data.map(item => item.value);
+    console.log(ratings);
+
+    if (ratings.length === 0) {
+        console.log("Inga betyg hittades.");
+        return;
+    }
+
+    const total = ratings.reduce((sum, rating) => sum + rating, 0);
+    const averageRating = total / ratings.length;
+
+    console.log("Medelbetyg:", averageRating.toFixed(2));
+    return averageRating;
+}
+
+getAverageRating();
+
 const handleRatings = () => {
     const ratingContainers = document.querySelectorAll(".rating");
 

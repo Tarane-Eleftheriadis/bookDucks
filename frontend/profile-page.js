@@ -1,143 +1,317 @@
+// import { baseUrl, getLoggedInUser, createLoginheader, getDisplayColor } from "./utils.js";
+
+// const savedBooksDiv = document.querySelector("#savedBooksDivContainer");
+// const sortSavedBooksDropdown = document.querySelector("#sortSavedBooks");
+
+// const getAverageRating = async (ratings) => {
+//     if (!ratings || ratings.length === 0) {
+//       return null;
+//     }
+//     let totalSum = 0;
+//     for (let i = 0; i < ratings.length; i++) {
+//       totalSum += ratings[i].value;
+//     }
+//     let count = ratings.length;
+//     let average = totalSum / count;
+//     console.log("Average rating:", average);
+//     return average;
+//   }
+// getAverageRating();
+
+// const getDataSavedBooks = async () => {
+//     const user = await getLoggedInUser();
+//     const jwt = localStorage.getItem("jwt");
+
+//     const respons = await axios.get(
+//         `${baseUrl}/api/saveds?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`,
+//         {
+//             headers: { Authorization: `Bearer ${jwt}` }
+//         }
+//     );
+//     console.log("Sparade böcker:", respons.data);
+//     return respons.data.data;
+// };
+
+// const renderPageSavedBooks = (books) => {
+//     savedBooksDiv.innerHTML = "";
+
+//     books.forEach(item => {
+//         const book = item.book;
+//         const imgUrl = baseUrl + book.image.url;
+
+//         const savedBookCard = document.createElement("div");
+//         savedBookCard.classList.add("bookCard", "savedBookCard");
+
+//         savedBookCard.innerHTML = `
+//             <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
+//             <h2>${book.title}</h2>
+//             <p>${book.author}</p>
+//             <p>Antal sidor: ${book.pages}</p>
+//             <p>Utg.datum: ${book.releaseDate}</p>
+//             <p>Betyg: ${average}</p>
+//             <button class="remove-btn" data-id="${item.id}">
+//                 <img src="/delete_red.png" />
+//             </button>
+//         `;
+
+//         const deleteBtn = savedBookCard.querySelector(".remove-btn");
+//         deleteBtn.addEventListener("click", async () => {
+//             const jwt = localStorage.getItem("jwt");
+
+//             try {
+//                 const response = await axios.delete(`${baseUrl}/api/saveds/${item.documentId}`, {
+//                     headers: {
+//                         Authorization: `Bearer ${jwt}`
+//                     }
+//                 });
+
+//                 console.log("Boken raderades från API:", response);
+//                 console.log(item.id)
+//                 savedBookCard.remove();
+//             } catch (error) {
+//                 console.error("Kunde inte radera bok från API:", error.response?.data || error.message);
+                
+//                 alert("Det gick inte att radera boken. Kontrollera om du är inloggad och har rätt behörigheter.");
+//             }
+//         });
+
+//         savedBooksDiv.append(savedBookCard);
+//     });
+// };
+
+// sortSavedBooksDropdown.addEventListener("change", async () => {
+//     const selectValue = sortSavedBooksDropdown.value;
+//     let books = await getDataSavedBooks();
+
+//     if (selectValue === "author") {
+//         books.sort((a, b) => a.book.author.localeCompare(b.book.author));
+//     } else if (selectValue === "title") {
+//         books.sort((a, b) => a.book.title.localeCompare(b.book.title));
+//     }
+
+//     renderPageSavedBooks(books);
+// });
+
+// const ratedBooksDiv = document.querySelector("#ratedBooksDivContainer");
+
+// const getRatedBooks = async () => {
+//     const jwt = localStorage.getItem("jwt");
+//     const user = await getLoggedInUser();
+
+
+//     const raitings = await axios.get(`${baseUrl}/api/ratings?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`, {
+//         headers: { Authorization: `Bearer ${jwt}` }
+//     });
+
+//     return raitings.data.data;
+// };
+
+// const renderRatedBooks = (raitings) => {
+//     ratedBooksDiv.innerHTML= "";
+
+//     raitings.forEach(item => {
+//         const book = item.book;
+//         const imgUrl = baseUrl + book.image.url;
+
+//         const ratedBookCard = document.createElement("div");
+//         ratedBookCard.classList.add("bookCard", "ratedBookCard");
+
+//         ratedBookCard.innerHTML = `
+//             <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
+//             <h2>${book.title}</h2>
+//             <p>${book.author}</p>
+//             <p>Antal sidor: ${book.pages}</p>
+//             <p>Utg.datum: ${book.releaseDate}</p>
+//             <p><strong>Ditt betyg:</strong> ${item.value}<span style='font-size:20px;'>&#9734;</span></p>
+//         `;
+
+//         ratedBooksDiv.append(ratedBookCard);
+//     });
+// };
+// const ratedBooksDropdown = document.querySelector("#sortRatedBooks")
+
+// ratedBooksDropdown.addEventListener("change", async () => {
+//     const ratedBooksvalue = ratedBooksDropdown.value;
+//     let books = await getRatedBooks();
+
+//     if (ratedBooksvalue === "author") {
+//         books.sort((a, b) => a.book.author.localeCompare(b.book.author));
+//     } else if (ratedBooksvalue === "title") {
+//         books.sort((a, b) => a.book.title.localeCompare(b.book.title));
+//     } else if (ratedBooksvalue === "rating") {
+//         books.sort((a, b) => b.value - a.value);
+//     }
+
+//     renderRatedBooks(books);
+// });
+
+// getDataSavedBooks().then(books => {
+//     renderPageSavedBooks(books);
+// });
+
+// getRatedBooks().then(ratings => {
+//     console.log("Betygsatta böcker:", ratings);
+//     renderRatedBooks(ratings);
+// });
+
+// getDisplayColor();
+// createLoginheader();
+
 import { baseUrl, getLoggedInUser, createLoginheader, getDisplayColor } from "./utils.js";
 
 const savedBooksDiv = document.querySelector("#savedBooksDivContainer");
 const sortSavedBooksDropdown = document.querySelector("#sortSavedBooks");
 
-const getDataSavedBooks = async () => {
-    const user = await getLoggedInUser();
-    const jwt = localStorage.getItem("jwt");
-
-    const respons = await axios.get(
-        `${baseUrl}/api/saveds?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`,
-        {
-            headers: { Authorization: `Bearer ${jwt}` }
-        }
-    );
-    console.log("Sparade böcker:", respons.data);
-    return respons.data.data;
+const getAverageRating = async (ratings) => {
+  if (!ratings || ratings.length === 0) return null;
+  let totalSum = 0;
+  for (let i = 0; i < ratings.length; i++) {
+    totalSum += ratings[i].value;
+  }
+  return totalSum / ratings.length;
 };
 
-const renderPageSavedBooks = (books) => {
-    savedBooksDiv.innerHTML = "";
-
-    books.forEach(item => {
-        const book = item.book;
-        const imgUrl = baseUrl + book.image.url;
-
-        const savedBookCard = document.createElement("div");
-        savedBookCard.classList.add("bookCard", "savedBookCard");
-
-        savedBookCard.innerHTML = `
-            <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
-            <h2>${book.title}</h2>
-            <p>${book.author}</p>
-            <p>Antal sidor: ${book.pages}</p>
-            <p>Utg.datum: ${book.releaseDate}</p>
-            <p>Betyg: ${item.value}</p>
-            <button class="remove-btn" data-id="${item.id}">
-                <img src="/delete_red.png" />
-            </button>
-        `;
-
-        const deleteBtn = savedBookCard.querySelector(".remove-btn");
-        deleteBtn.addEventListener("click", async () => {
-            const jwt = localStorage.getItem("jwt");
-
-            try {
-                const response = await axios.delete(`${baseUrl}/api/saveds/${item.documentId}`, {
-                    headers: {
-                        Authorization: `Bearer ${jwt}`
-                    }
-                });
-
-                console.log("Boken raderades från API:", response);
-                console.log(item.id)
-                savedBookCard.remove();
-            } catch (error) {
-                console.error("Kunde inte radera bok från API:", error.response?.data || error.message);
-                
-                alert("Det gick inte att radera boken. Kontrollera om du är inloggad och har rätt behörigheter.");
-            }
-        });
-
-        savedBooksDiv.append(savedBookCard);
+const getAverageRatingForBook = async (bookId) => {
+  const jwt = localStorage.getItem("jwt");
+  try {
+    const response = await axios.get(`${baseUrl}/api/ratings?filters[book][id][$eq]=${bookId}`, {
+      headers: { Authorization: `Bearer ${jwt}` },
     });
+    const ratings = response.data.data;
+    return await getAverageRating(ratings);
+  } catch (error) {
+    console.error("Kunde inte hämta betyg för bok:", bookId, error);
+    return null;
+  }
+};
+
+const getDataSavedBooks = async () => {
+  const user = await getLoggedInUser();
+  const jwt = localStorage.getItem("jwt");
+
+  const response = await axios.get(
+    `${baseUrl}/api/saveds?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`,
+    {
+      headers: { Authorization: `Bearer ${jwt}` },
+    }
+  );
+  return response.data.data;
+};
+
+const renderPageSavedBooks = async (books) => {
+  savedBooksDiv.innerHTML = "";
+
+  for (const item of books) {
+    const book = item.book;
+    const bookId = book.id;
+    const imgUrl = baseUrl + book.image.url;
+
+    const average = await getAverageRatingForBook(bookId);
+
+    const savedBookCard = document.createElement("div");
+    savedBookCard.classList.add("bookCard", "savedBookCard");
+
+    savedBookCard.innerHTML = `
+      <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
+      <h2>${book.title}</h2>
+      <p>${book.author}</p>
+      <p>Antal sidor: ${book.pages}</p>
+      <p>Utg.datum: ${book.releaseDate}</p>
+      <p>Betyg: ${average !== null ? average.toFixed(1) : "Ej betygsatt"}</p>
+      <button class="remove-btn" data-id="${item.id}">
+        <img src="/delete_red.png" />
+      </button>
+    `;
+
+    const deleteBtn = savedBookCard.querySelector(".remove-btn");
+    deleteBtn.addEventListener("click", async () => {
+      try {
+        const jwt = localStorage.getItem("jwt");
+        await axios.delete(`${baseUrl}/api/saveds/${item.id}`, {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
+        savedBookCard.remove();
+      } catch (error) {
+        console.error("Kunde inte radera bok från API:", error.response?.data || error.message);
+        alert("Det gick inte att radera boken. Kontrollera om du är inloggad och har rätt behörigheter.");
+      }
+    });
+
+    savedBooksDiv.append(savedBookCard);
+  }
 };
 
 sortSavedBooksDropdown.addEventListener("change", async () => {
-    const selectValue = sortSavedBooksDropdown.value;
-    let books = await getDataSavedBooks();
+  const selectValue = sortSavedBooksDropdown.value;
+  let books = await getDataSavedBooks();
 
-    if (selectValue === "author") {
-        books.sort((a, b) => a.book.author.localeCompare(b.book.author));
-    } else if (selectValue === "title") {
-        books.sort((a, b) => a.book.title.localeCompare(b.book.title));
-    }
+  if (selectValue === "author") {
+    books.sort((a, b) => a.book.author.localeCompare(b.book.author));
+  } else if (selectValue === "title") {
+    books.sort((a, b) => a.book.title.localeCompare(b.book.title));
+  }
 
-    renderPageSavedBooks(books);
+  await renderPageSavedBooks(books);
 });
 
 const ratedBooksDiv = document.querySelector("#ratedBooksDivContainer");
+const ratedBooksDropdown = document.querySelector("#sortRatedBooks");
 
 const getRatedBooks = async () => {
-    const jwt = localStorage.getItem("jwt");
-    const user = await getLoggedInUser();
+  const jwt = localStorage.getItem("jwt");
+  const user = await getLoggedInUser();
 
-
-    const raitings = await axios.get(`${baseUrl}/api/ratings?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`, {
-        headers: { Authorization: `Bearer ${jwt}` }
-    });
-
-    return raitings.data.data;
+  const response = await axios.get(`${baseUrl}/api/ratings?filters[user][id][$eq]=${user.id}&populate[book][populate]=image`, {
+    headers: { Authorization: `Bearer ${jwt}` },
+  });
+  return response.data.data;
 };
 
-const renderRatedBooks = (raitings) => {
-    ratedBooksDiv.innerHTML= "";
+const renderRatedBooks = (ratings) => {
+  ratedBooksDiv.innerHTML = "";
 
-    raitings.forEach(item => {
-        const book = item.book;
-        const imgUrl = baseUrl + book.image.url;
+  ratings.forEach((item) => {
+    const book = item.book;
+    const imgUrl = baseUrl + book.image.url;
 
-        const ratedBookCard = document.createElement("div");
-        ratedBookCard.classList.add("bookCard", "ratedBookCard");
+    const ratedBookCard = document.createElement("div");
+    ratedBookCard.classList.add("bookCard", "ratedBookCard");
 
-        ratedBookCard.innerHTML = `
-            <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
-            <h2>${book.title}</h2>
-            <p>${book.author}</p>
-            <p>Antal sidor: ${book.pages}</p>
-            <p>Utg.datum: ${book.releaseDate}</p>
-            <p><strong>Ditt betyg:</strong> ${item.value}<span style='font-size:20px;'>&#9734;</span></p>
-        `;
+    ratedBookCard.innerHTML = `
+      <img src="${imgUrl}" alt="Bokomslag" class="bookImg" />
+      <h2>${book.title}</h2>
+      <p>${book.author}</p>
+      <p>Antal sidor: ${book.pages}</p>
+      <p>Utg.datum: ${book.releaseDate}</p>
+      <p><strong>Ditt betyg:</strong> ${item.value}<span style='font-size:20px;'>&#9734;</span></p>
+    `;
 
-        ratedBooksDiv.append(ratedBookCard);
-    });
+    ratedBooksDiv.append(ratedBookCard);
+  });
 };
-const ratedBooksDropdown = document.querySelector("#sortRatedBooks")
 
 ratedBooksDropdown.addEventListener("change", async () => {
-    const ratedBooksvalue = ratedBooksDropdown.value;
-    let books = await getRatedBooks();
+  const ratedBooksvalue = ratedBooksDropdown.value;
+  let books = await getRatedBooks();
 
-    if (ratedBooksvalue === "author") {
-        books.sort((a, b) => a.book.author.localeCompare(b.book.author));
-    } else if (ratedBooksvalue === "title") {
-        books.sort((a, b) => a.book.title.localeCompare(b.book.title));
-    } else if (ratedBooksvalue === "rating") {
-        books.sort((a, b) => b.value - a.value);
-    }
+  if (ratedBooksvalue === "author") {
+    books.sort((a, b) => a.book.author.localeCompare(b.book.author));
+  } else if (ratedBooksvalue === "title") {
+    books.sort((a, b) => a.book.title.localeCompare(b.book.title));
+  } else if (ratedBooksvalue === "rating") {
+    books.sort((a, b) => b.value - a.value);
+  }
 
-    renderRatedBooks(books);
+  renderRatedBooks(books);
 });
 
-getDataSavedBooks().then(books => {
-    renderPageSavedBooks(books);
-});
+(async () => {
+  const books = await getDataSavedBooks();
+  await renderPageSavedBooks(books);
 
-getRatedBooks().then(ratings => {
-    console.log("Betygsatta böcker:", ratings);
-    renderRatedBooks(ratings);
-});
+  const ratings = await getRatedBooks();
+  renderRatedBooks(ratings);
+})();
 
 getDisplayColor();
 createLoginheader();
